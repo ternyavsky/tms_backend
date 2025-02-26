@@ -4,7 +4,7 @@ import "time"
 
 // Links    []Link `gorm:"many2many:source_links"`
 type SourcePost struct {
-	ChannelId      string `gorm:"primaryKey" json:"channel_id"`
+	ChannelId      string `json:"channel_id"`
 	PostId         string `json:"post_id"`
 	IsStory        bool   `json:"is_story"`
 	Subscribers    string
@@ -19,4 +19,6 @@ type SourcePost struct {
 	PostStatistics []PostStatistic `gorm:"foreignKey:PostId" json:"post_statistics"`
 	SendedAt       time.Time       `json:"sended_at"`
 	EditedAt       time.Time       `json:"edited_at"`
+	CreatedAt       time.Time          `json:"created_at"`
+
 }

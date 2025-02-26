@@ -1,5 +1,7 @@
 package domain
 
+import "time"
+
 type Source struct {
 	ChannelId string `gorm:"primaryKey" json:"channel_id"`
 	// Links            []Link            `gorm:"many2many:link_sources;"`
@@ -8,4 +10,5 @@ type Source struct {
 	SourcePosts      []SourcePost      `gorm:"foreignKey:ChannelId"`
 	Sessions         []Session         `gorm:"foreignKey:ChannelId"`
 	Orders           []CallbackOrder   `gorm:"foreignKey:ChannelId"`
+	CreatedAt       time.Time          `json:"created_at"`
 }

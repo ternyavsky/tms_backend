@@ -1,5 +1,7 @@
 package domain
 
+import "time"
+
 type LinkType string
 
 const (
@@ -11,7 +13,11 @@ const (
 )
 
 type Link struct {
-	LinkValue string
-	LinkType  LinkType
+	Id uint `gorm:"primaryKey" json:"id"`
+	LinkValue string `json:"link_value"`
+	LinkType  LinkType `json:"link_type"`
+	IsValid bool `json:"is_valid"`
+	CreatedAt       time.Time          `json:"created_at"`
+
 	// Sources   []Source `gorm:"many2many:link_sources;"`
 }
