@@ -41,12 +41,12 @@ func (link *LinkController) GetAllLinks(ctx *gin.Context) {
 func (link *LinkController) CreateLink(ctx *gin.Context) {
 	var createLinkRequestDto dto.LinkRequestDto
 	if err := ctx.ShouldBindJSON(&createLinkRequestDto); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"message": err})
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 	value, err := link.linkService.CreateLink(createLinkRequestDto)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 	}
 	ctx.JSON(http.StatusCreated, value)
 }

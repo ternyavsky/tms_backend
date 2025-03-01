@@ -24,8 +24,9 @@ func (session *SessionConrtoller) GetAllSessions(ctx *gin.Context) {
 	values, err := session.sessionService.GetAllSessions()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"message": err,
+			"message": err.Error(),
 		})
+		return
 	}
 
 	ctx.JSON(200, gin.H{
@@ -41,12 +42,13 @@ func (session *SessionConrtoller) GetAllSessions(ctx *gin.Context) {
 func (session *SessionConrtoller) CreateSession(ctx *gin.Context) {
 	var createSessionRequestDto dto.SessionRequestDto
 	if err := ctx.ShouldBindJSON(&createSessionRequestDto); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"message": err})
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 	value, err := session.sessionService.CreateSession(createSessionRequestDto)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
 	}
 	ctx.JSON(http.StatusCreated, value)
 }

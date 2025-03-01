@@ -26,10 +26,31 @@ func (context *LinkRepository) GetAllLinks() ([]domain.Link, error) {
 	return links, nil
 }
 
-func (context *LinkRepository) FindLinkByChannelUrl() (domain.Link, error) {
+func (context *LinkRepository) CheckLinkByChannelUrl(channelUrl string) (domain.Link, error) {
 	var link domain.Link
-	err := context.db.Model(&domain.Link{}).Find(&link).Error
+	err := context.db.Where("link_value = ?", channelUrl).First(&link).Error
 	if err != nil {
+		return link, errors.New("failed to get link by this channelUrl")
+	}
+	link = domain.Link{
+		LinkValue: channelUrl,
+		LinkType:  domain.InvalidRequest,
+		IsValid:   false,
+	}
+	err = context.db.Create(&link).Error
+	if err != nil {
+		return link, errors.New("failed to create link")
+	}
+	return link, nil
+}
+
+func (context *LinkRepository) CheckLinkStatus(linkId uint) (domain.Link, error) {
+	var link domain.Link
+	err := context.db.First(&link, "id = ?", linkId).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return domain.Link{}, errors.New("link not found")
+		}
 		return domain.Link{}, errors.New("failed to get link")
 	}
 	return link, nil

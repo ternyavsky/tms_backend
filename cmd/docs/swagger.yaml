@@ -250,6 +250,40 @@ paths:
             $ref: '#/definitions/domain.Link'
       tags:
       - links
+  /api/v1/search/{channelUrl}:
+    get:
+      parameters:
+      - description: URL канала
+        in: path
+        name: channelUrl
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Link'
+      tags:
+      - search
+  /api/v1/search/status/{linkId}:
+    get:
+      parameters:
+      - description: ID ссылки
+        in: path
+        name: linkId
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Link'
+      tags:
+      - search
   /api/v1/sessions:
     get:
       produces:

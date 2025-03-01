@@ -16,4 +16,8 @@ func InitRoutes(r *gin.Engine) {
 		links := api.Group("links")
 		InitLinksRoutes(links)
 	}
+	{
+		search := api.Group("search")
+		InitSearchRoutes(search)
+	}
 }
