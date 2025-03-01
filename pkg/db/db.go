@@ -10,6 +10,8 @@ import (
 	"gorm.io/gorm"
 )
 
+var DB *gorm.DB
+
 func InitDatabse() error {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Europe/Moscow", config.GlobalConfig.DBHost, config.GlobalConfig.DBUser, config.GlobalConfig.DBPassword, config.GlobalConfig.DBName, config.GlobalConfig.DBPort)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
@@ -22,7 +24,8 @@ func InitDatabse() error {
 		fmt.Println("error this")
 		return err
 	}
-	db.AutoMigrate(
+	DB = db
+	DB.AutoMigrate(
 		&domain.Link{},
 		&domain.CallbackOrder{},
 		&domain.SourceUpdate{},

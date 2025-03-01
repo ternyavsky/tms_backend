@@ -1,3 +1,4 @@
 /cmd/tmp
 .env
 .env.production
+tmp

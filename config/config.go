@@ -20,7 +20,7 @@ type Config struct {
 var GlobalConfig Config
 
 func LoadConfig() {
-	viper.SetConfigFile("../.env")
+	viper.SetConfigFile(".env")
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {

@@ -1,8 +1,283 @@
 basePath: /
+definitions:
+  domain.CallbackOrder:
+    properties:
+      channelId:
+        description: Связываем с Source.ChannelId
+        type: string
+      created_at:
+        type: string
+      customer_id:
+        type: string
+      id:
+        type: integer
+      repost_bot_username:
+        type: string
+      source:
+        $ref: '#/definitions/domain.Source'
+      source_id:
+        type: integer
+      webhooks:
+        type: string
+    type: object
+  domain.Link:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      is_valid:
+        type: boolean
+      link_type:
+        $ref: '#/definitions/domain.LinkType'
+      link_value:
+        type: string
+      sources:
+        items:
+          $ref: '#/definitions/domain.Source'
+        type: array
+    type: object
+  domain.LinkType:
+    enum:
+    - PUBLIC
+    - PRIVATE
+    - INVALID_VALUE
+    - INVALID_REQUEST
+    - NOT_FOUND
+    type: string
+    x-enum-varnames:
+    - Public
+    - Private
+    - InvalidValue
+    - InvalidRequest
+    - NotFound
+  domain.PostStatistic:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      post_id:
+        type: string
+      reactions:
+        type: integer
+      views:
+        type: integer
+    type: object
+  domain.Session:
+    properties:
+      channel_id:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      join_at:
+        type: string
+      session_id:
+        type: string
+      source:
+        $ref: '#/definitions/domain.Source'
+      source_id:
+        type: integer
+    type: object
+  domain.Source:
+    properties:
+      channel_id:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      links:
+        items:
+          $ref: '#/definitions/domain.Link'
+        type: array
+      orders:
+        items:
+          $ref: '#/definitions/domain.CallbackOrder'
+        type: array
+      sessions:
+        items:
+          $ref: '#/definitions/domain.Session'
+        type: array
+      sourcePosts:
+        items:
+          $ref: '#/definitions/domain.SourcePost'
+        type: array
+      sourceStatistics:
+        items:
+          $ref: '#/definitions/domain.SourceStatistic'
+        type: array
+      sourceUpdates:
+        items:
+          $ref: '#/definitions/domain.SourceUpdate'
+        type: array
+    type: object
+  domain.SourcePost:
+    properties:
+      buttons:
+        type: string
+      channel_id:
+        type: string
+      created_at:
+        type: string
+      edited_at:
+        type: string
+      entities:
+        type: string
+      id:
+        type: integer
+      is_deleted:
+        type: boolean
+      is_edited:
+        type: boolean
+      is_story:
+        type: boolean
+      media_group_id:
+        type: string
+      mediaURL:
+        description: MVP skip
+        type: string
+      message:
+        type: string
+      post_id:
+        type: string
+      post_statistics:
+        items:
+          $ref: '#/definitions/domain.PostStatistic'
+        type: array
+      reactions:
+        type: string
+      sended_at:
+        type: string
+      source:
+        $ref: '#/definitions/domain.Source'
+      source_id:
+        type: integer
+      subscribers:
+        type: string
+    type: object
+  domain.SourceStatistic:
+    properties:
+      channel_id:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      source:
+        $ref: '#/definitions/domain.Source'
+      source_id:
+        type: integer
+      subscribers:
+        type: integer
+    type: object
+  domain.SourceUpdate:
+    properties:
+      about:
+        type: string
+      avatarFile:
+        type: integer
+      channel_id:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      source:
+        $ref: '#/definitions/domain.Source'
+      source_id:
+        type: integer
+      title:
+        type: string
+    type: object
+  dto.LinkRequestDto:
+    properties:
+      is_valid:
+        type: boolean
+      link_type:
+        $ref: '#/definitions/domain.LinkType'
+      link_value:
+        type: string
+    type: object
+  dto.SessionRequestDto:
+    properties:
+      channel_id:
+        type: string
+      is_active:
+        type: boolean
+      session_id:
+        type: string
+      source_id:
+        type: integer
+    type: object
 info:
   contact: {}
   description: API для Telegram Metric System
   title: Telegram Metric System Backend
   version: "1.0"
-paths: {}
+paths:
+  /api/v1/links:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Link'
+            type: array
+      tags:
+      - links
+    post:
+      parameters:
+      - description: Данные ссылки
+        in: body
+        name: session
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LinkRequestDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domain.Link'
+      tags:
+      - links
+  /api/v1/sessions:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Session'
+            type: array
+      tags:
+      - sessions
+    post:
+      parameters:
+      - description: Данные сессии
+        in: body
+        name: session
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SessionRequestDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domain.Session'
+      tags:
+      - sessions
 swagger: "2.0"

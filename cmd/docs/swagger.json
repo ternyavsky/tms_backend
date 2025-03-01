@@ -7,5 +7,425 @@
         "version": "1.0"
     },
     "basePath": "/",
-    "paths": {}
+    "paths": {
+        "/api/v1/links": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "links"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Link"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "links"
+                ],
+                "parameters": [
+                    {
+                        "description": "Данные ссылки",
+                        "name": "session",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.LinkRequestDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Link"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sessions": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sessions"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Session"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sessions"
+                ],
+                "parameters": [
+                    {
+                        "description": "Данные сессии",
+                        "name": "session",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SessionRequestDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Session"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "domain.CallbackOrder": {
+            "type": "object",
+            "properties": {
+                "channelId": {
+                    "description": "Связываем с Source.ChannelId",
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "customer_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "repost_bot_username": {
+                    "type": "string"
+                },
+                "source": {
+                    "$ref": "#/definitions/domain.Source"
+                },
+                "source_id": {
+                    "type": "integer"
+                },
+                "webhooks": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Link": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_valid": {
+                    "type": "boolean"
+                },
+                "link_type": {
+                    "$ref": "#/definitions/domain.LinkType"
+                },
+                "link_value": {
+                    "type": "string"
+                },
+                "sources": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Source"
+                    }
+                }
+            }
+        },
+        "domain.LinkType": {
+            "type": "string",
+            "enum": [
+                "PUBLIC",
+                "PRIVATE",
+                "INVALID_VALUE",
+                "INVALID_REQUEST",
+                "NOT_FOUND"
+            ],
+            "x-enum-varnames": [
+                "Public",
+                "Private",
+                "InvalidValue",
+                "InvalidRequest",
+                "NotFound"
+            ]
+        },
+        "domain.PostStatistic": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "post_id": {
+                    "type": "string"
+                },
+                "reactions": {
+                    "type": "integer"
+                },
+                "views": {
+                    "type": "integer"
+                }
+            }
+        },
+        "domain.Session": {
+            "type": "object",
+            "properties": {
+                "channel_id": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "join_at": {
+                    "type": "string"
+                },
+                "session_id": {
+                    "type": "string"
+                },
+                "source": {
+                    "$ref": "#/definitions/domain.Source"
+                },
+                "source_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "domain.Source": {
+            "type": "object",
+            "properties": {
+                "channel_id": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Link"
+                    }
+                },
+                "orders": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.CallbackOrder"
+                    }
+                },
+                "sessions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Session"
+                    }
+                },
+                "sourcePosts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.SourcePost"
+                    }
+                },
+                "sourceStatistics": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.SourceStatistic"
+                    }
+                },
+                "sourceUpdates": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.SourceUpdate"
+                    }
+                }
+            }
+        },
+        "domain.SourcePost": {
+            "type": "object",
+            "properties": {
+                "buttons": {
+                    "type": "string"
+                },
+                "channel_id": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "edited_at": {
+                    "type": "string"
+                },
+                "entities": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_deleted": {
+                    "type": "boolean"
+                },
+                "is_edited": {
+                    "type": "boolean"
+                },
+                "is_story": {
+                    "type": "boolean"
+                },
+                "mediaURL": {
+                    "description": "MVP skip",
+                    "type": "string"
+                },
+                "media_group_id": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "post_id": {
+                    "type": "string"
+                },
+                "post_statistics": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.PostStatistic"
+                    }
+                },
+                "reactions": {
+                    "type": "string"
+                },
+                "sended_at": {
+                    "type": "string"
+                },
+                "source": {
+                    "$ref": "#/definitions/domain.Source"
+                },
+                "source_id": {
+                    "type": "integer"
+                },
+                "subscribers": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.SourceStatistic": {
+            "type": "object",
+            "properties": {
+                "channel_id": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "source": {
+                    "$ref": "#/definitions/domain.Source"
+                },
+                "source_id": {
+                    "type": "integer"
+                },
+                "subscribers": {
+                    "type": "integer"
+                }
+            }
+        },
+        "domain.SourceUpdate": {
+            "type": "object",
+            "properties": {
+                "about": {
+                    "type": "string"
+                },
+                "avatarFile": {
+                    "type": "integer"
+                },
+                "channel_id": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "source": {
+                    "$ref": "#/definitions/domain.Source"
+                },
+                "source_id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.LinkRequestDto": {
+            "type": "object",
+            "properties": {
+                "is_valid": {
+                    "type": "boolean"
+                },
+                "link_type": {
+                    "$ref": "#/definitions/domain.LinkType"
+                },
+                "link_value": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.SessionRequestDto": {
+            "type": "object",
+            "properties": {
+                "channel_id": {
+                    "type": "string"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "session_id": {
+                    "type": "string"
+                },
+                "source_id": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
 }
